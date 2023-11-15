@@ -1,4 +1,0 @@
-[debug] [reactor-test] Classpath dependencies List()
-[debug] [reactor-test] Dependencies from configurations List(reactor)
-[debug] Bloop wrote the configuration of project 'reactor-test' to '/Users/anselmedonato/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Aalto/Concurrent Programming/reactor/.bloop/reactor-test.json'
-[success] Generated .bloop/reactor-test.json
