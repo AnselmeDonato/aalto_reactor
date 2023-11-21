@@ -5,35 +5,47 @@
 package reactor
 
 import reactor.api.Event
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Queue
 
 final class BlockingEventQueue[T] (private val capacity: Int) {
-	val queue = ArrayBuffer[Any]() //97 hmmmpf bof le any 
+	/* Holds the elements of this BlockingQueue. */
+  val queue = Queue[Event[T]]()
 
   @throws[InterruptedException]
-  def enqueue[U <: T](e: Event[U]): Unit = {
+  def enqueue[U <: T](e: Event[U]): Unit = synchronized {
 		if(Thread.interrupted()){
 			throw new InterruptedException(); 
 		}
+		while(queue.length >= capacity){
+			wait()
+		}
 
-		println("enqueue") //97
-		queue.prepend(e)
+		if(e != null){
+			queue += e.asInstanceOf[Event[T]]
+			notifyAll()
+		}
 	}
 
   @throws[InterruptedException]
-  def dequeue: Event[T] = {
+  def dequeue: Event[T] = synchronized {
 		if(Thread.interrupted()){
 			throw new InterruptedException()
 		}
-		if(queue.length == 0){
-			throw new InterruptedException("Queue is empty")
+		while(queue.isEmpty){
+			wait()
 		}
 
-		println("dequeue") //97
-		queue.remove(0).asInstanceOf[Event[T]] //97 What if error? 
+		val last_item = queue.dequeue().asInstanceOf[Event[T]]
+		notifyAll()
+		last_item
 	}
 
-  def getAll: Seq[Event[T]] = queue.asInstanceOf[Seq[Event[T]]]
+  def getAll: Seq[Event[T]] = synchronized {
+		val seq: Seq[Event[T]] = queue.toSeq
+		queue.clear()
+		notifyAll()
+		seq
+	}
 
   def getSize: Int = queue.length
 
