@@ -47,7 +47,9 @@ final class BlockingEventQueue[T] (private val capacity: Int) {
 		seq
 	}
 
-  def getSize: Int = queue.length
+  def getSize: Int = synchronized {
+		queue.size
+	}
 
   def getCapacity: Int = capacity
 
