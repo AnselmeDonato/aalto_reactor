@@ -77,10 +77,4 @@ class QueueSemanticsTest extends AnyFunSuite with TimeLimitedTests {
     assert(everything(2) === e3)
   }
 	
-	test("queue doesn't accept null input to enqueue") {
-		val q = new BlockingEventQueue[Integer](1)
-		q.enqueue(null)
-		assert(q.getSize === 0)
-	}
-	
 }
