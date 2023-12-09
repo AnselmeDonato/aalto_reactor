@@ -2,7 +2,8 @@ name := "CS-E4110-assignment"
 
 version := "22.11.01"
 
-scalaVersion := "2.13.6"
+// scalaVersion := "2.13.6"
+scalaVersion := "2.13.12"
 
 libraryDependencies += "org.scalatest" %% "scalatest-funsuite" % "3.2.9"
 
